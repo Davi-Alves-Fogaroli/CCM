@@ -1,0 +1,54 @@
+# criando app account
+	py manage.py startapp account
+
+# configurando views
+	em "mega_zord/accounts/views.py" acrescente:
+	"""
+	from django.http import HttpResponse
+
+	def index(request):
+    	return HttpResponse("Hello, world. You're at the polls index.")
+	"""
+
+# configurando urls
+	1-criar arquivo "urls.py" em "mega_zord/accounts" e prencher com :
+	"""
+	from django.urls import path
+	
+	from . import views
+	
+	urlpatterns = [
+	    path('', views.index, name='index'),
+	]
+	"""
+	2-em "mega_zord/mega_zord/urls.py" complementar:
+	
+	""" from django.urls import path """ --> """ from django.urls import path, include """
+	
+	""" 
+	urlpatterns = [
+	    path('admin/', admin.site.urls),
+	]
+	""" 
+	--> 
+	""" 
+	urlpatterns = [
+	    path('accounts/', include('accounts.urls')),
+	    path('admin/', admin.site.urls),
+	] """
+
+# configurar app para ser reconhecido pelo Django:
+	em "mega_zord/mega_zord/settings.py"
+	ache "INSTALLED_APPS = [...]" e acrescente no topo ou em baixo """ 'accounts.apps.AccountsConfig', """
+
+# estendendo "user model" existente
+	em "mega_zord/accounts" crie um arquivo "models.py"
+	em "mega_zord/accounts/models.py" coloque:
+
+	"""
+	from django.contrib.auth.models import User
+	
+	class Employee(models.Model):
+	    user = models.OneToOneField(User, on_delete=models.CASCADE)
+	    department = models.CharField(max_length=100)
+	"""
